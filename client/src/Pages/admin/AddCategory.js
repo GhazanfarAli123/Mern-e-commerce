@@ -3,6 +3,7 @@ import Layout from "../../Components/Layouts/Layout"
 import axios from "axios"
 import Categoryform from '../../Components/forms/Categoryform'
 import { Modal } from 'antd'
+import { useAuth } from '../../Context/auth'
 
 
 const AddCategory = () => {
@@ -11,13 +12,14 @@ const AddCategory = () => {
   const [visible,setVisibal] = useState(false)
   const [selected , setSelected] = useState("")
   const [updateName , setUpdateName] = useState("")
+  const [auth] = useAuth()
 
   const handelSubmit = async(e) =>{
     try{
 
       const {data} = await axios.post("http://localhost:1000/api/v1/category/create-category",{name},{
         headers:{
-          "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDU2N2NlNTZhOGNhZmEzYmUwZjc1YjAiLCJpYXQiOjE2ODM2NTQzNTMsImV4cCI6MTY4NDI1OTE1M30.e9w8XPb2d6S4MZ1FHPuzb0iAM7Z8nz93hZX_v7tWDC8"
+          "auth-token":auth.token
         }
       })
     console.log(`category ${data.name} is created`)
@@ -44,7 +46,7 @@ const AddCategory = () => {
     try {
       const { data } = await axios.put(`http://localhost:1000/api/v1/category/update-category/${selected._id}`,{name:updateName},{
         headers:{
-          "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDU2N2NlNTZhOGNhZmEzYmUwZjc1YjAiLCJpYXQiOjE2ODM2NTQzNTMsImV4cCI6MTY4NDI1OTE1M30.e9w8XPb2d6S4MZ1FHPuzb0iAM7Z8nz93hZX_v7tWDC8"
+          "auth-token":auth.token
         }
       })
       setSelected(null)
@@ -61,9 +63,10 @@ const AddCategory = () => {
     try {
       const { data } = await axios.delete(`http://localhost:1000/api/v1/category/delete-category/${pId}`,{
         headers:{
-          "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDU2N2NlNTZhOGNhZmEzYmUwZjc1YjAiLCJpYXQiOjE2ODM2NTQzNTMsImV4cCI6MTY4NDI1OTE1M30.e9w8XPb2d6S4MZ1FHPuzb0iAM7Z8nz93hZX_v7tWDC8"
+          "auth-token":auth.token
         }
       })
+      console.log(`${data} category is deleted`)
       setSelected(null)
       getAllCategory()
     } catch (err) {
